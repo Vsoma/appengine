@@ -16,7 +16,12 @@
     <name>Appengine</name>
 
     <properties>
+	    <INSTANCE_CONNECTION_NAME>vsomakubercluster:us-east1:mysql</INSTANCE_CONNECTION_NAME>
+		<user>root</user>
+		<password>rootsql</password>
+		<database>appengine</database>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
+		<start-class>com.vsoma.gcp.AppengineApp</start-class>
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
         <commons-io.version>2.5</commons-io.version>
@@ -201,10 +206,16 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+		<dependency>                        
+		  <groupId>mysql</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		  <version>6.0.5</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.google.cloud.sql</groupId>
+		  <artifactId>mysql-socket-factory-connector-j-6</artifactId>
+		  <version>1.0.4</version>
+		</dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -339,6 +350,16 @@
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
+		   <plugin>
+			 <groupId>com.google.cloud.tools</groupId>
+			 <artifactId>appengine-maven-plugin</artifactId>
+			 <version>1.3.1</version>
+		   </plugin>
+		   <plugin>
+			 <groupId>org.eclipse.jetty</groupId>
+			 <artifactId>jetty-maven-plugin</artifactId>
+			 <version>9.3.7.v20160115</version>
+		   </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -536,6 +557,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+					<mainClass>com.vsoma.gcp.AppengineApp</mainClass>
                     <executable>true</executable>
                     <fork>true</fork>
                     <!--
@@ -748,6 +770,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
+							<excludeDevtools>false</excludeDevtools>
                             <executable>true</executable>
                         </configuration>
                         <executions>
